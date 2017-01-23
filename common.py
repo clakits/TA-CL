@@ -1,4 +1,5 @@
 # common function
+#Author: Christine Lakits
 import sys
 import requests
 import json
@@ -6,7 +7,7 @@ import csv
 from lxml import html
 from datetime import datetime
 from time import mktime
-#json_file = sys.argv[1]
+
 
 def json2csv(data):
 
@@ -28,9 +29,9 @@ def json2csv(data):
                 else:
                     print ",",
             print "\r"
-def csv2json(csv_file,json_file):
+def csv2json_file(csv_file,json_file):
     result = []
-    with open(csv_file) as csvfile:
+    with open(csv_file,'rU') as csvfile:
         reader = csv.DictReader(csvfile)
         title = reader.fieldnames
         for row in reader:
@@ -38,6 +39,20 @@ def csv2json(csv_file,json_file):
 
     with open(json_file, "w") as f:
         f.write(json.dumps(result, indent=4, sort_keys=True))
+
+def json2csv_file(json_file,csv_file,header_row):
+    csvfile = csv.writer(open(csv_file, "wb+"))
+
+    with open(json_file, "r") as json_data:
+        data = json.load(json_data)
+
+    csvfile.writerow(header_row)
+    for d in data:
+        row = []
+        for h in header_row:
+            row.append(d[h])
+        csvfile.writerow(row)
+
 
 def search4match(orig_dict, search_dict):
     search_result = []
